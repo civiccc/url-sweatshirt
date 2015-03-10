@@ -1,0 +1,38 @@
+{
+  "name": "url-sweatshirt",
+  "author": "Ryan Fitzgerald <ryan.fitzgerald@brigade.com>",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "description": "Wrap your API endpoints in a warm layer of helper functions",
+  "scripts": {
+    "test": "jest",
+    "js": "babel --modules common --out-dir dist src",
+    "prepublish": "npm run js"
+  },
+  "jest": {
+    "scriptPreprocessor": "__tests__/jest.conf.js",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "./__tests__/jest.conf.js"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel": "^4.7.8",
+    "jest-cli": "^0.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brigade/url-sweatshirt.git"
+  },
+  "keywords": [
+    "url",
+    "generation",
+    "template"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brigade/url-sweatshirt/issues"
+  },
+  "homepage": "https://github.com/brigade/url-sweatshirt"
+}
