@@ -26,12 +26,12 @@ describe('wrap', () => {
       expect(userPostUrl(3, { user_id: 1, id: 2 })).toEqual('/users/1/posts/2');
     });
 
-    xit('adds extra params to the query string', () => {
+    it('adds extra params to the query string', () => {
       expect(userPostUrl(1, 2, { extra_param: 3, another_extra_param: 4 }))
         .toEqual('/users/1/posts/2?extra_param=3&another_extra_param=4');
     });
 
-    xit('leaves a query param out if null is provided', () => {
+    it('leaves a query param out if null is provided', () => {
       expect(userPostUrl(1, 2, { extra_param: null }))
         .toEqual('/users/1/posts/2');
     });
@@ -88,6 +88,22 @@ describe('wrap', () => {
 
     it('overrides the default with a named param', () => {
       expect(categoryUrl({ name: 'sports' })).toEqual('/categories/sports');
+    });
+  });
+
+  describe("with a default parameter that isn't in the path", () => {
+    var categoryUrl;
+
+    beforeEach(() => {
+      categoryUrl = wrap('/categories', { name: 'all' });
+    });
+
+    it('adds it as a query param', () => {
+      expect(categoryUrl()).toEqual('/categories?name=all');
+    });
+
+    it('can be removed with null', () => {
+      expect(categoryUrl({ name: null })).toEqual('/categories');
     });
   });
 

@@ -65,55 +65,6 @@ function wrap(urlSpec, defaults = {}) {
   };
 }
 
-function _generateUrl(urlSpec, defaults, positionalParams, namedParams) {
-  const segments = urlSpec.split('/').filter(segment => segment);
-  const missingSegments = [];
-
-  let urlParts = segments.map((segment) => {
-    if (segment.indexOf(':') === 0) {
-      let paramName = segment.slice(1);
-      let value;
-
-      // Defaults have the lowest priority...
-      if (defaults[paramName] !== undefined) {
-        value = defaults[paramName];
-      }
-
-      // ... then positional params ...
-      if (positionalParams.length > 0) {
-        value = positionalParams.shift();
-      }
-
-      // ... then named params.
-      if (namedParams[paramName] !== undefined) {
-        value = namedParams[paramName];
-      }
-
-      if (value === undefined || value === null) {
-        missingSegments.push(segment);
-      }
-
-      return value && value.toString();
-    } else {
-      return segment;
-    }
-  });
-
-  if (missingSegments.length > 0) {
-    throw new Error(
-      `Missing [${missingSegments.join(', ')}] for spec '${urlSpec}'`
-    );
-  }
-
-  if (positionalParams.length > 0) {
-    throw new Error(
-      `Extra params [${positionalParams.join(', ')}] for spec '${urlSpec}'`
-    );
-  }
-
-  return `/${urlParts.join('/')}`;
-}
-
 /**
  * @param {object} defaults An object containing parameters that should be
  *   pre-applied to a group of generated URL helpers. The most likely use case
@@ -137,6 +88,92 @@ function _generateUrl(urlSpec, defaults, positionalParams, namedParams) {
  *   userUrl(1, { _host: null });
  */
 function withDefaults(defaults, callback) {
+}
+
+/**
+ * Build a URL based on the given spec, defaults, and params.
+ * @private
+ */
+function _generateUrl(urlSpec, defaults, positionalParams, namedParams) {
+  const segments = urlSpec.split('/').filter(segment => segment);
+  const missingSegments = [];
+  let queryString;
+
+  let urlParts = segments.map((segment) => {
+    if (segment.indexOf(':') === 0) {
+      let paramName = segment.slice(1);
+      let value;
+
+      // Defaults have the lowest priority...
+      if (defaults[paramName] !== undefined) {
+        value = defaults[paramName];
+        delete defaults[paramName];
+      }
+
+      // ... then positional params ...
+      if (positionalParams.length) {
+        value = positionalParams.shift();
+      }
+
+      // ... then named params.
+      if (namedParams[paramName] !== undefined) {
+        value = namedParams[paramName];
+        delete namedParams[paramName];
+      }
+
+      if (value === undefined || value === null) {
+        missingSegments.push(segment);
+      }
+
+      return value && value.toString();
+    } else {
+      return segment;
+    }
+  });
+
+  if (missingSegments.length) {
+    throw new Error(
+      `Missing [${missingSegments.join(', ')}] for spec '${urlSpec}'`
+    );
+  }
+
+  if (positionalParams.length) {
+    throw new Error(
+      `Extra params [${positionalParams.join(', ')}] for spec '${urlSpec}'`
+    );
+  }
+
+  queryString = _buildQueryString(defaults, namedParams) || '';
+
+  return `/${urlParts.join('/')}${queryString}`;
+}
+
+/**
+ * @param {array} paramObjects Objects containing key-value pairs of params.
+ *   Objects passed later in the list have a higher precedence. Params with the
+ *   value `null` will not appear in the final query string.
+ * @return {string} A query string of the form '?a_param=1&another_param=2'.
+ * @private
+ */
+function _buildQueryString(...paramObjects) {
+  const params = {};
+  let paramStrings = [];
+
+  paramObjects.forEach((paramObject) => {
+    Object.keys(paramObject).forEach((key) => {
+      params[key] = paramObject[key];
+    });
+  });
+
+  Object.keys(params).forEach((key) => {
+    if (params[key] !== null && params[key] !== undefined) {
+      paramStrings.push(`${key}=${params[key].toString()}`);
+    }
+  });
+
+  if (paramStrings.length) {
+    return `?${paramStrings.join('&')}`;
+  }
 }
 
 module.exports = { wrap, withDefaults };
