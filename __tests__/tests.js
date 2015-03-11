@@ -36,8 +36,9 @@ describe('wrap', () => {
         .toEqual('/users/1/posts/2');
     });
 
-    xit('escapes params', () => {
-      expect(userPostUrl('a b', 'c d')).toEqual('/users/1/posts/2');
+    it('escapes params', () => {
+      expect(userPostUrl('a/b', 'c/d', { e: 'f/g' }))
+        .toEqual('/users/a%2Fb/posts/c%2Fd?e=f%2Fg');
     });
 
     xit('adds an anchor', () => {

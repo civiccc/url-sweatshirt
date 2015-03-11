@@ -125,7 +125,7 @@ function _generateUrl(urlSpec, defaults, positionalParams, namedParams) {
         missingSegments.push(segment);
       }
 
-      return value && value.toString();
+      return value && encodeURIComponent(value.toString());
     } else {
       return segment;
     }
@@ -167,7 +167,8 @@ function _buildQueryString(...paramObjects) {
 
   Object.keys(params).forEach((key) => {
     if (params[key] !== null && params[key] !== undefined) {
-      paramStrings.push(`${key}=${params[key].toString()}`);
+      let value = encodeURIComponent(params[key].toString());
+      paramStrings.push(`${key}=${value}`);
     }
   });
 
