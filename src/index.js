@@ -50,6 +50,57 @@
  *   categoryUrl('sports');
  */
 function wrap(urlSpec, defaults = {}) {
+  return (...args) => {
+    const lastArg = args[args.length - 1];
+    let namedParams;
+
+    if (lastArg && typeof lastArg === 'object') {
+      namedParams = lastArg;
+      args.pop();
+    } else {
+      namedParams = {};
+    }
+
+    return _generateUrl(urlSpec, defaults, args, namedParams);
+  };
+}
+
+function _generateUrl(urlSpec, defaults, positionalParams, namedParams) {
+  const segments = urlSpec.split('/').filter(segment => segment);
+  const missingSegments = [];
+
+  let urlParts = segments.map((segment) => {
+    if (segment.indexOf(':') === 0) {
+      let value = positionalParams.shift();
+      let paramName = segment.slice(1);
+
+      if (namedParams[paramName] !== undefined) {
+        value = namedParams[paramName];
+      }
+
+      if (value === undefined || value === null) {
+        missingSegments.push(segment);
+      }
+
+      return value && value.toString();
+    } else {
+      return segment;
+    }
+  });
+
+  if (missingSegments.length > 0) {
+    throw new Error(
+      `Missing [${missingSegments.join(', ')}] for spec '${urlSpec}'`
+    );
+  }
+
+  if (positionalParams.length > 0) {
+    throw new Error(
+      `Extra params [${positionalParams.join(', ')}] for spec '${urlSpec}'`
+    );
+  }
+
+  return `/${urlParts.join('/')}`;
 }
 
 /**
