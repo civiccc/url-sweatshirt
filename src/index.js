@@ -71,9 +71,20 @@ function _generateUrl(urlSpec, defaults, positionalParams, namedParams) {
 
   let urlParts = segments.map((segment) => {
     if (segment.indexOf(':') === 0) {
-      let value = positionalParams.shift();
       let paramName = segment.slice(1);
+      let value;
 
+      // Defaults have the lowest priority...
+      if (defaults[paramName] !== undefined) {
+        value = defaults[paramName];
+      }
+
+      // ... then positional params ...
+      if (positionalParams.length > 0) {
+        value = positionalParams.shift();
+      }
+
+      // ... then named params.
       if (namedParams[paramName] !== undefined) {
         value = namedParams[paramName];
       }

@@ -78,15 +78,15 @@ describe('wrap', () => {
       categoryUrl = wrap('/categories/:name', { name: 'all' });
     });
 
-    xit('fills in the default', () => {
+    it('fills in the default', () => {
       expect(categoryUrl()).toEqual('/categories/all');
     });
 
-    xit('overrides the default with a positional param', () => {
+    it('overrides the default with a positional param', () => {
       expect(categoryUrl('sports')).toEqual('/categories/sports');
     });
 
-    xit('overrides the default with a named param', () => {
+    it('overrides the default with a named param', () => {
       expect(categoryUrl({ name: 'sports' })).toEqual('/categories/sports');
     });
   });
