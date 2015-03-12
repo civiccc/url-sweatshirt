@@ -1,13 +1,13 @@
 jest.autoMockOff();
 
-const { wrap, withDefaults } = require('../src/');
+const { generate, withDefaults } = require('../src/');
 
-describe('wrap', () => {
+describe('generate', () => {
   describe('with a basic spec', () => {
     var userPostUrl;
 
     beforeEach(() => {
-      userPostUrl = wrap('/users/:user_id/posts/:id');
+      userPostUrl = generate('/users/:user_id/posts/:id');
     });
 
     it('supports positional params', () => {
@@ -76,7 +76,7 @@ describe('wrap', () => {
     var categoryUrl;
 
     beforeEach(() => {
-      categoryUrl = wrap('/categories/:name', { name: 'all' });
+      categoryUrl = generate('/categories/:name', { name: 'all' });
     });
 
     it('fills in the default', () => {
@@ -96,7 +96,7 @@ describe('wrap', () => {
     var categoryUrl;
 
     beforeEach(() => {
-      categoryUrl = wrap('/categories', { name: 'all' });
+      categoryUrl = generate('/categories', { name: 'all' });
     });
 
     it('adds it as a query param', () => {
@@ -109,17 +109,17 @@ describe('wrap', () => {
   });
 
   xdescribe('with invalid arguments');
-  // wrap();
-  // wrap(1);
-  // wrap({ _host: 'example.com' });
+  // generate();
+  // generate(1);
+  // generate({ _host: 'example.com' });
 });
 
 describe('withDefaults', () => {
   var userUrl;
 
   beforeEach(() => {
-    withDefaults({ _host: 'api.example.com' }, function(wrap) {
-      userUrl = wrap('/users/:id');
+    withDefaults({ _host: 'api.example.com' }, function(generate) {
+      userUrl = generate('/users/:id');
     });
   });
 

@@ -7,7 +7,7 @@
  *   the given spec. The function can take positional args for the placeholders
  *   in the spec, as well as named arguments in an options object. Any extra
  *   named parameters will be included as query params; if any named parameters
- *   are missing, `wrap` will throw an error.
+ *   are missing, `generate` will throw an error.
  *
  *   There are a couple of special named parameters that can be provided:
  *
@@ -16,7 +16,7 @@
  *
  *    * `_anchor`: A hash fragment to append to the URL.
  * @example
- *   var userPostUrl = wrap('/users/:user_id/posts/:id');
+ *   var userPostUrl = generate('/users/:user_id/posts/:id');
  *
  *   // all return '/users/1/posts/2'
  *   userPostUrl(1, 2);
@@ -41,7 +41,7 @@
  *   userPostUrl(1, 2, 3);
  *   userPostUrl({ id: 1 }, 2);
  * @example
- *   var categoryUrl = wrap('/categories/:name', { name: 'all' });
+ *   var categoryUrl = generate('/categories/:name', { name: 'all' });
  *
  *   // returns '/categories/all'
  *   categoryUrl();
@@ -49,7 +49,7 @@
  *   // returns '/categories/sports'
  *   categoryUrl('sports');
  */
-function wrap(urlSpec, defaults = {}) {
+function generate(urlSpec, defaults = {}) {
   return (...args) => {
     const lastArg = args[args.length - 1];
     let namedParams;
@@ -70,12 +70,12 @@ function wrap(urlSpec, defaults = {}) {
  *   pre-applied to a group of generated URL helpers. The most likely use case
  *   for this is to provide `_host`.
  * @param {function} callback A function that will have a customized version of
- *   `wrap` passed to it.
+ *   `generate` passed to it.
  * @example
  *   var userUrl;
  *
- *   withDefaults({ _host: 'api.example.com' }, function(wrap) {
- *     userUrl = wrap('/users/:id');
+ *   withDefaults({ _host: 'api.example.com' }, function(generate) {
+ *     userUrl = generate('/users/:id');
  *   });
  *
  *   // returns '//api.example.com/users/1'
@@ -177,4 +177,4 @@ function _buildQueryString(...paramObjects) {
   }
 }
 
-module.exports = { wrap, withDefaults };
+module.exports = { generate, withDefaults };
