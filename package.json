@@ -10,11 +10,12 @@
     "prepublish": "npm run js"
   },
   "jest": {
-    "scriptPreprocessor": "__tests__/jest.conf.js",
+    "scriptPreprocessor": "spec/jest.conf.js",
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "./__tests__/jest.conf.js"
-    ]
+      "./spec/jest.conf.js"
+    ],
+    "testDirectoryName": "spec"
   },
   "dependencies": {},
   "devDependencies": {
