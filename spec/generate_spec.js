@@ -53,7 +53,7 @@ describe('generate', () => {
     it('adds an anchor', () => {
       expect(userPostUrl(1, 2, { _anchor: 'an_anchor' }))
         .toEqual('/users/1/posts/2#an_anchor');
-    })
+    });
 
     it('adds a host', () => {
       expect(userPostUrl(1, 2, { _host: 'api.example.com' }))
