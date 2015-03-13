@@ -2,6 +2,8 @@
 
 *Wrap your URLs in a warm layer of helper functions.*
 
+[![Build Status](https://travis-ci.org/brigade/url-sweatshirt.svg?branch=master)](https://travis-ci.org/brigade/url-sweatshirt)
+
 Projects like [JsRoutes] are great when your JavaScript is tightly integrated
 with a Rails backend. However, if you want to reduce coupling between your
 frontend and backend code, you're going to need to manage your routes manually.
