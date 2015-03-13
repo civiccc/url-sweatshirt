@@ -74,6 +74,43 @@ function generate(urlSpec, defaults = {}) {
 }
 
 /**
+ * @param {object} defaults An object containing parameters that should be
+ *   pre-applied to a group of generated URL helpers. The most likely use case
+ *   for this is to provide `_host`.
+ * @param {function} callback A function that will have a customized version of
+ *   `generate` passed to it.
+ * @example
+ *   var userUrl;
+ *
+ *   withDefaults({ _host: 'api.example.com' }, function(generate) {
+ *     userUrl = generate('/users/:id');
+ *   });
+ *
+ *   // returns '//api.example.com/users/1'
+ *   userUrl(1);
+ *
+ *   // returns '//test.com/users/1'
+ *   userUrl(1, { _host: 'test.com' });
+ *
+ *   // returns '/users/1'
+ *   userUrl(1, { _host: null });
+ */
+function withDefaults(globalDefaults, callback) {
+  callback((urlSpec, localDefaults = {}) => {
+    localDefaults = _cloneObject(localDefaults);
+
+    for (let key in globalDefaults) {
+      if (globalDefaults.hasOwnProperty(key) &&
+          !localDefaults.hasOwnProperty(key)) {
+        localDefaults[key] = globalDefaults[key];
+      }
+    }
+
+    return generate(urlSpec, localDefaults);
+  });
+}
+
+/**
  * Build a URL based on the given spec, defaults, and params.
  * @private
  */
@@ -186,31 +223,6 @@ function _cloneObject(object) {
   }
 
   return newObject;
-}
-
-/**
- * @param {object} defaults An object containing parameters that should be
- *   pre-applied to a group of generated URL helpers. The most likely use case
- *   for this is to provide `_host`.
- * @param {function} callback A function that will have a customized version of
- *   `generate` passed to it.
- * @example
- *   var userUrl;
- *
- *   withDefaults({ _host: 'api.example.com' }, function(generate) {
- *     userUrl = generate('/users/:id');
- *   });
- *
- *   // returns '//api.example.com/users/1'
- *   userUrl(1);
- *
- *   // returns '//test.com/users/1'
- *   userUrl(1, { _host: 'test.com' });
- *
- *   // returns '/users/1'
- *   userUrl(1, { _host: null });
- */
-function withDefaults(defaults, callback) {
 }
 
 module.exports = { generate, withDefaults };
