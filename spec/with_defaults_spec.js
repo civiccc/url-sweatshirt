@@ -1,6 +1,6 @@
 jest.autoMockOff();
 
-const { withDefaults } = require('../src/');
+const { withDefaults } = require('..');
 
 describe('withDefaults', () => {
   var userUrl;

@@ -1,6 +1,6 @@
 jest.autoMockOff();
 
-const { generate } = require('../src/');
+const { generate } = require('..');
 
 describe('generate', () => {
   describe('with a basic spec', () => {
