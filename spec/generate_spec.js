@@ -60,6 +60,11 @@ describe('generate', () => {
         .toEqual('//api.example.com/users/1/posts/2');
     });
 
+    it('can include a port in the _host param', () => {
+      expect(userPostUrl(1, 2, { _host: 'api.example.com:8888' }))
+        .toEqual('//api.example.com:8888/users/1/posts/2');
+    });
+
     it('adds a protocol', () => {
       expect(userPostUrl(1, 2, { _host: 'example.com', _protocol: 'https' }))
         .toEqual('https://example.com/users/1/posts/2');

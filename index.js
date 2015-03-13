@@ -153,9 +153,9 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
 
     if (value === undefined || value === null) {
       missingSegments.push(segment);
-    } else {
-      return encodeURIComponent(value.toString());
     }
+
+    return value ? value.toString() : '';
   }
 
   function buildProtocolAndHostString() {
@@ -200,7 +200,7 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
 
   let urlParts = segments.map((segment) => {
     if (isSegmentDynamic(segment)) {
-      return getParamValue(segment);
+      return encodeURIComponent(getParamValue(segment));
     } else {
       return segment;
     }
