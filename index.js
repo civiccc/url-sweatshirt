@@ -120,6 +120,11 @@ function withDefaults(globalDefaults, callback) {
 /**
  * Build a URL based on the given spec, defaults, and params.
  * @private
+ * @param {string} urlSpec
+ * @param {object} _defaults
+ * @param {(number|string)[]} _positionalParams
+ * @param {object} _namedParams
+ * @return {string}
  */
 function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
   const defaults = _cloneObject(_defaults);
@@ -129,10 +134,18 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
   const segments = urlSpec.split('/').filter(segment => segment);
   const missingSegments = [];
 
+  /**
+   * @param {string} segment
+   * @return {boolean}
+   */
   function isSegmentDynamic(segment) {
     return segment.indexOf(':') === 0;
   }
 
+  /**
+   * @param {string} segment
+   * @return {string}
+   */
   function getParamValue(segment) {
     const name = isSegmentDynamic(segment) ? segment.slice(1) : segment;
     let value;
@@ -158,6 +171,9 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
     return value ? value.toString() : '';
   }
 
+  /**
+   * @return {string}
+   */
   function buildProtocolAndHostString() {
     const protocol = getParamValue('_protocol');
     const host = getParamValue('_host');
@@ -172,11 +188,17 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
     ].join('');
   }
 
+  /**
+   * @return {string}
+   */
   function buildAnchorString() {
     const anchor = getParamValue('_anchor');
     return anchor ? `#${anchor}` : '';
   }
 
+  /**
+   * @return {string}
+   */
   function buildQueryString() {
     const params = {};
     const paramObjects = [defaults, namedParams];
