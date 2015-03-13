@@ -122,7 +122,7 @@ function withDefaults(globalDefaults, callback) {
  * @private
  * @param {string} urlSpec
  * @param {object} _defaults
- * @param {(number|string)[]} _positionalParams
+ * @param {object[]} _positionalParams
  * @param {object} _namedParams
  * @return {string}
  */
