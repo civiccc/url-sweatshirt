@@ -9,12 +9,16 @@
  *   named parameters will be included as query params; if any named parameters
  *   are missing, `generate` will throw an error.
  *
- *   There are a couple of special named parameters that can be provided:
+ *   There are a few special named parameters that can be provided:
  *
  *    * `_host`: The domain name to generate a URL for. If this is provided,
  *      URLs will be protocol-relative (`//host.com/path`) instead of relative.
  *
  *    * `_anchor`: A hash fragment to append to the URL.
+ *
+ *    * `_protocol`: A protocol to include in the URL. If this is given but
+ *      there's no host, the helper will raise an error.
+ *
  * @example
  *   var userPostUrl = generate('/users/:user_id/posts/:id');
  *
@@ -35,6 +39,9 @@
  *   // returns '//api.example.com/users/1/posts/2'
  *   userPostUrl(1, 2, { _host: 'api.example.com' });
  *
+ *   // returns 'http://api.example.com/users/1/posts/2'
+ *   userPostUrl(1, 2, { _host: 'api.example.com', _protocol: 'http' });
+ *
  *   // all raise errors
  *   userPostUrl();
  *   userPostUrl(1);
@@ -51,11 +58,11 @@
  */
 function generate(urlSpec, defaults = {}) {
   if (typeof urlSpec !== 'string') {
-    throw 'Must provide a string as a URL spec';
+    throw new Error('Must provide a string as a URL spec');
   }
 
   if (!defaults || typeof defaults !== 'object') {
-    throw 'Must provide an object for defaults';
+    throw new Error('Must provide an object for defaults');
   }
 
   return (...args) => {
@@ -151,9 +158,18 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
     }
   }
 
-  function buildHostString() {
+  function buildProtocolAndHostString() {
+    let protocol = getParamValue('_protocol');
     let host = getParamValue('_host');
-    return host ? `//${host}/` : '/';
+
+    if (!host && protocol) {
+      throw new Error("Can't provide a protocol with no host");
+    }
+
+    return [
+      protocol ? `${protocol}:` : '',
+      host ? `//${host}/` : '/'
+    ].join('');
   }
 
   function buildAnchorString() {
@@ -202,11 +218,11 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
     );
   }
 
-  let host = buildHostString();
+  let protocolAndHost = buildProtocolAndHostString();
   let anchor = buildAnchorString();
   let query = buildQueryString(); // build last to avoid special params
 
-  return [host, urlParts.join('/'), query, anchor].join('');
+  return [protocolAndHost, urlParts.join('/'), query, anchor].join('');
 }
 
 /**

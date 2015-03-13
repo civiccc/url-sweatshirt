@@ -60,6 +60,17 @@ describe('generate', () => {
         .toEqual('//api.example.com/users/1/posts/2');
     });
 
+    it('adds a protocol', () => {
+      expect(userPostUrl(1, 2, { _host: 'example.com', _protocol: 'https' }))
+        .toEqual('https://example.com/users/1/posts/2');
+    });
+
+    it('raises an error if given a protocol and no host', () => {
+      expect(() => userPostUrl(1, 2, { _protocol: 'https' })).toThrow(
+        "Can't provide a protocol with no host"
+      );
+    });
+
     it('raises an error if there are missing params', () => {
       expect(() => userPostUrl()).toThrow(
         "Missing [:user_id, :id] for spec '/users/:user_id/posts/:id'"
