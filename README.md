@@ -2,6 +2,7 @@
 
 *Wrap your URLs in a warm layer of helper functions.*
 
+[![npm version](https://badge.fury.io/js/url-sweatshirt.svg)](http://badge.fury.io/js/url-sweatshirt)
 [![Build Status](https://travis-ci.org/brigade/url-sweatshirt.svg?branch=master)](https://travis-ci.org/brigade/url-sweatshirt)
 
 Projects like [JsRoutes] are great when your JavaScript is tightly integrated
