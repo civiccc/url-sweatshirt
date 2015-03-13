@@ -3,8 +3,17 @@ jest.autoMockOff();
 const { generate } = require('../index');
 
 describe('generate', () => {
+  it('throws an error with invalid arguments', () => {
+    expect(() => generate())
+      .toThrow('Must provide a string as a URL spec');
+    expect(() => generate(1))
+      .toThrow('Must provide a string as a URL spec');
+    expect(() => generate('/', null))
+      .toThrow('Must provide an object for defaults');
+  });
+
   describe('with a basic spec', () => {
-    var userPostUrl;
+    let userPostUrl;
 
     beforeEach(() => {
       userPostUrl = generate('/users/:user_id/posts/:id');
@@ -73,7 +82,7 @@ describe('generate', () => {
   });
 
   describe('with a default parameter', () => {
-    var categoryUrl;
+    let categoryUrl;
 
     beforeEach(() => {
       categoryUrl = generate('/categories/:name', { name: 'all' });
@@ -91,13 +100,13 @@ describe('generate', () => {
       expect(categoryUrl({ name: 'sports' })).toEqual('/categories/sports');
     });
 
-    it('can be called more than once (regression test)', () => {
+    it('can be called more than once [regression]', () => {
       expect(categoryUrl()).toEqual(categoryUrl());
     });
   });
 
   describe("with a default parameter that isn't in the path", () => {
-    var categoryUrl;
+    let categoryUrl;
 
     beforeEach(() => {
       categoryUrl = generate('/categories', { name: 'all' });
@@ -111,9 +120,4 @@ describe('generate', () => {
       expect(categoryUrl({ name: null })).toEqual('/categories');
     });
   });
-
-  xdescribe('with invalid arguments');
-  // generate();
-  // generate(1);
-  // generate({ _host: 'example.com' });
 });

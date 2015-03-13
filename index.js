@@ -50,6 +50,14 @@
  *   categoryUrl('sports');
  */
 function generate(urlSpec, defaults = {}) {
+  if (typeof urlSpec !== 'string') {
+    throw 'Must provide a string as a URL spec';
+  }
+
+  if (!defaults || typeof defaults !== 'object') {
+    throw 'Must provide an object for defaults';
+  }
+
   return (...args) => {
     const lastArg = args[args.length - 1];
     let namedParams;
@@ -179,7 +187,6 @@ function _cloneObject(object) {
 
   return newObject;
 }
-
 
 /**
  * @param {object} defaults An object containing parameters that should be

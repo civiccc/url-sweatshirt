@@ -3,7 +3,7 @@ jest.autoMockOff();
 const { withDefaults } = require('../index');
 
 describe('withDefaults', () => {
-  var userUrl;
+  let userUrl;
 
   beforeEach(() => {
     withDefaults({ _host: 'api.example.com' }, function(generate) {
