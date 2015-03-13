@@ -6,11 +6,12 @@ Wrap your API endpoints in a warm layer of helper functions.
 
 * JSDoc
 * Basic helpers
+* Support for anchors and hosts
 
 ### TODO
 
 * Be forced to change name
-* Support for anchors, hosts, protocols
+* Support for protocols
 * `withDefaults` function
 * README
 * Support for optional and splat params

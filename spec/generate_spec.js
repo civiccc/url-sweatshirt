@@ -41,12 +41,12 @@ describe('generate', () => {
         .toEqual('/users/a%2Fb/posts/c%2Fd?e=f%2Fg');
     });
 
-    xit('adds an anchor', () => {
+    it('adds an anchor', () => {
       expect(userPostUrl(1, 2, { _anchor: 'an_anchor' }))
         .toEqual('/users/1/posts/2#an_anchor');
     })
 
-    xit('adds a hostname', () => {
+    it('adds a host', () => {
       expect(userPostUrl(1, 2, { _host: 'api.example.com' }))
         .toEqual('//api.example.com/users/1/posts/2');
     });

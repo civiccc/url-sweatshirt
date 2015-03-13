@@ -77,10 +77,12 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
   const segments = urlSpec.split('/').filter(segment => segment);
   const missingSegments = [];
 
-  let queryString, urlParts;
+  function isSegmentDynamic(segment) {
+    return segment.indexOf(':') === 0;
+  }
 
   function getParamValue(segment) {
-    let name = segment.slice(1);
+    let name = isSegmentDynamic(segment) ? segment.slice(1) : segment;
     let value;
 
     if (defaults[name] !== undefined) {
@@ -104,6 +106,16 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
     }
   }
 
+  function buildHostString() {
+    let host = getParamValue('_host');
+    return host ? `//${host}/` : '/';
+  }
+
+  function buildAnchorString() {
+    let anchor = getParamValue('_anchor');
+    return anchor ? `#${anchor}` : '';
+  }
+
   function buildQueryString() {
     const params = {};
     let paramObjects = [defaults, namedParams];
@@ -125,8 +137,8 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
     return paramStrings.length ? `?${paramStrings.join('&')}` : '';
   }
 
-  urlParts = segments.map((segment) => {
-    if (segment.indexOf(':') === 0) {
+  let urlParts = segments.map((segment) => {
+    if (isSegmentDynamic(segment)) {
       return getParamValue(segment);
     } else {
       return segment;
@@ -145,7 +157,11 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
     );
   }
 
-  return `/${urlParts.join('/')}${buildQueryString()}`;
+  let host = buildHostString();
+  let anchor = buildAnchorString();
+  let query = buildQueryString(); // build last to avoid special params
+
+  return [host, urlParts.join('/'), query, anchor].join('');
 }
 
 /**
