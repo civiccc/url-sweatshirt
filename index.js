@@ -134,7 +134,7 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
   }
 
   function getParamValue(segment) {
-    let name = isSegmentDynamic(segment) ? segment.slice(1) : segment;
+    const name = isSegmentDynamic(segment) ? segment.slice(1) : segment;
     let value;
 
     if (defaults[name] !== undefined) {
@@ -159,8 +159,8 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
   }
 
   function buildProtocolAndHostString() {
-    let protocol = getParamValue('_protocol');
-    let host = getParamValue('_host');
+    const protocol = getParamValue('_protocol');
+    const host = getParamValue('_host');
 
     if (!host && protocol) {
       throw new Error("Can't provide a protocol with no host");
@@ -173,14 +173,14 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
   }
 
   function buildAnchorString() {
-    let anchor = getParamValue('_anchor');
+    const anchor = getParamValue('_anchor');
     return anchor ? `#${anchor}` : '';
   }
 
   function buildQueryString() {
     const params = {};
-    let paramObjects = [defaults, namedParams];
-    let paramStrings = [];
+    const paramObjects = [defaults, namedParams];
+    const paramStrings = [];
 
     paramObjects.forEach((paramObject) => {
       Object.keys(paramObject).forEach((key) => {
@@ -190,7 +190,7 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
 
     Object.keys(params).forEach((key) => {
       if (params[key] !== null && params[key] !== undefined) {
-        let value = encodeURIComponent(params[key].toString());
+        const value = encodeURIComponent(params[key].toString());
         paramStrings.push(`${key}=${value}`);
       }
     });
@@ -198,7 +198,7 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
     return paramStrings.length ? `?${paramStrings.join('&')}` : '';
   }
 
-  let urlParts = segments.map((segment) => {
+  const urlParts = segments.map((segment) => {
     if (isSegmentDynamic(segment)) {
       return encodeURIComponent(getParamValue(segment));
     } else {
@@ -218,9 +218,9 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
     );
   }
 
-  let protocolAndHost = buildProtocolAndHostString();
-  let anchor = buildAnchorString();
-  let query = buildQueryString(); // build last to avoid special params
+  const protocolAndHost = buildProtocolAndHostString();
+  const anchor = buildAnchorString();
+  const query = buildQueryString(); // build last to avoid special params
 
   return [protocolAndHost, urlParts.join('/'), query, anchor].join('');
 }
