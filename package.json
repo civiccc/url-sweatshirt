@@ -1,9 +1,9 @@
 {
   "name": "url-sweatshirt",
   "author": "Ryan Fitzgerald <ryan.fitzgerald@brigade.com>",
-  "version": "0.0.0",
+  "version": "0.9.9",
   "main": "dist/url-sweatshirt.js",
-  "description": "Wrap your API endpoints in a warm layer of helper functions",
+  "description": "Wrap your URLs in a warm layer of helper functions",
   "scripts": {
     "test": "jest",
     "js": "babel --modules common --out-file dist/url-sweatshirt.js ./index.js",
