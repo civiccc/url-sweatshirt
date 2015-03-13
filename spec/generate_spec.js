@@ -1,6 +1,6 @@
 jest.autoMockOff();
 
-const { generate } = require('..');
+const { generate } = require('../index');
 
 describe('generate', () => {
   describe('with a basic spec', () => {
@@ -89,6 +89,10 @@ describe('generate', () => {
 
     it('overrides the default with a named param', () => {
       expect(categoryUrl({ name: 'sports' })).toEqual('/categories/sports');
+    });
+
+    it('can be called more than once (regression test)', () => {
+      expect(categoryUrl()).toEqual(categoryUrl());
     });
   });
 

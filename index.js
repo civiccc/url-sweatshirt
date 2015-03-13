@@ -69,38 +69,65 @@ function generate(urlSpec, defaults = {}) {
  * Build a URL based on the given spec, defaults, and params.
  * @private
  */
-function _generateUrl(urlSpec, defaults, positionalParams, namedParams) {
+function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
+  const defaults = _cloneObject(_defaults);
+  const positionalParams = _positionalParams.slice(0);
+  const namedParams = _cloneObject(_namedParams);
+
   const segments = urlSpec.split('/').filter(segment => segment);
   const missingSegments = [];
-  let queryString;
 
-  let urlParts = segments.map((segment) => {
+  let queryString, urlParts;
+
+  function getParamValue(segment) {
+    let name = segment.slice(1);
+    let value;
+
+    if (defaults[name] !== undefined) {
+      value = defaults[name];
+      delete defaults[name];
+    }
+
+    if (positionalParams.length) {
+      value = positionalParams.shift();
+    }
+
+    if (namedParams[name] !== undefined) {
+      value = namedParams[name];
+      delete namedParams[name];
+    }
+
+    if (value === undefined || value === null) {
+      missingSegments.push(segment);
+    } else {
+      return encodeURIComponent(value.toString());
+    }
+  }
+
+  function buildQueryString() {
+    const params = {};
+    let paramObjects = [defaults, namedParams];
+    let paramStrings = [];
+
+    paramObjects.forEach((paramObject) => {
+      Object.keys(paramObject).forEach((key) => {
+        params[key] = paramObject[key];
+      });
+    });
+
+    Object.keys(params).forEach((key) => {
+      if (params[key] !== null && params[key] !== undefined) {
+        let value = encodeURIComponent(params[key].toString());
+        paramStrings.push(`${key}=${value}`);
+      }
+    });
+
+    return paramStrings.length ? `?${paramStrings.join('&')}` : '';
+  }
+
+  urlParts = segments.map((segment) => {
     if (segment.indexOf(':') === 0) {
-      let paramName = segment.slice(1);
-      let value;
-
-      // Defaults have the lowest priority...
-      if (defaults[paramName] !== undefined) {
-        value = defaults[paramName];
-        delete defaults[paramName];
-      }
-
-      // ... then positional params ...
-      if (positionalParams.length) {
-        value = positionalParams.shift();
-      }
-
-      // ... then named params.
-      if (namedParams[paramName] !== undefined) {
-        value = namedParams[paramName];
-        delete namedParams[paramName];
-      }
-
-      if (value === undefined || value === null) {
-        missingSegments.push(segment);
-      }
-
-      return value && encodeURIComponent(value.toString());
+      return getParamValue(segment);
     } else {
       return segment;
     }
@@ -118,39 +145,25 @@ function _generateUrl(urlSpec, defaults, positionalParams, namedParams) {
     );
   }
 
-  queryString = _buildQueryString(defaults, namedParams) || '';
-
-  return `/${urlParts.join('/')}${queryString}`;
+  return `/${urlParts.join('/')}${buildQueryString()}`;
 }
 
 /**
- * @param {array} paramObjects Objects containing key-value pairs of params.
- *   Objects passed later in the list have a higher precedence. Params with the
- *   value `null` will not appear in the final query string.
- * @return {string} A query string of the form '?a_param=1&another_param=2'.
- * @private
+ * @param {object} object
+ * @return {object} Return a shallow clone of the given object.
  */
-function _buildQueryString(...paramObjects) {
-  const params = {};
-  let paramStrings = [];
+function _cloneObject(object) {
+  const newObject = {};
 
-  paramObjects.forEach((paramObject) => {
-    Object.keys(paramObject).forEach((key) => {
-      params[key] = paramObject[key];
-    });
-  });
-
-  Object.keys(params).forEach((key) => {
-    if (params[key] !== null && params[key] !== undefined) {
-      let value = encodeURIComponent(params[key].toString());
-      paramStrings.push(`${key}=${value}`);
+  for (let key in object) {
+    if (object.hasOwnProperty(key)) {
+      newObject[key] = object[key];
     }
-  });
-
-  if (paramStrings.length) {
-    return `?${paramStrings.join('&')}`;
   }
+
+  return newObject;
 }
+
 
 /**
  * @param {object} defaults An object containing parameters that should be
