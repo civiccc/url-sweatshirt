@@ -139,7 +139,7 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
    * @return {boolean}
    */
   function isSegmentDynamic(segment) {
-    return segment.indexOf(':') === 0;
+    return segment.charAt(0) === ':';
   }
 
   /**
