@@ -45,9 +45,9 @@ describe('generate', () => {
         .toEqual('/users/1/posts/2');
     });
 
-    it('escapes params', () => {
-      expect(userPostUrl('a/b', 'c/d', { e: 'f/g' }))
-        .toEqual('/users/a%2Fb/posts/c%2Fd?e=f%2Fg');
+    it('escapes params and query param names', () => {
+      expect(userPostUrl('a/b', 'c/d', { 'e[]': 'f/g' }))
+        .toEqual('/users/a%2Fb/posts/c%2Fd?e%5B%5D=f%2Fg');
     });
 
     it('adds an anchor', () => {

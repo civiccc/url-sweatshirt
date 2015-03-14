@@ -212,8 +212,9 @@ function _generateUrl(urlSpec, _defaults, _positionalParams, _namedParams) {
 
     Object.keys(params).forEach((key) => {
       if (params[key] !== null && params[key] !== undefined) {
+        const encodedKey = encodeURIComponent(key);
         const value = encodeURIComponent(params[key].toString());
-        paramStrings.push(`${key}=${value}`);
+        paramStrings.push(`${encodedKey}=${value}`);
       }
     });
 
