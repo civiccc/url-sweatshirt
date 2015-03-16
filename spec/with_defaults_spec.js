@@ -40,4 +40,24 @@ describe('withDefaults', () => {
   it('can have the param removed by route-specific default params', () => {
     expect(relativeUrl()).toEqual('/local');
   });
+
+  describe('with a custom query encoder', () => {
+    let withDefaults;
+
+    function myCustomEncoder(obj) {
+      return 'hello';
+    }
+
+    beforeEach(() => {
+      withDefaults = require('../index')(myCustomEncoder).withDefaults;
+
+      withDefaults({ _host: 'api.example.com' }, function(generate) {
+        userUrl = generate('/');
+      });
+    });
+
+    it('uses the custom encoder', () => {
+      expect(userUrl()).toEqual('//api.example.com/?hello');
+    });
+  });
 });

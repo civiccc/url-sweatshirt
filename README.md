@@ -79,6 +79,31 @@ withDefaults({ _host: 'api.example.com' }, function(generate) {
 urls.userUrl(1);
 ```
 
+### Using a fancier query encoder
+
+By default, the query string is built using a simple function that calls
+`toString()` on param values and then URI-encodes the param keys and values.
+For some use cases, it's helpful to use alternate strategies for this -- for
+example, you might want to use jQuery's `$.param` to convert objects and arrays
+into Rails-style bracket notation. You can accomplish this by calling the
+function exported from the `url-sweatshirt` module and passing in a function
+with the appropriate signature (takes a single object param and returns a
+string).
+
+``` javascript
+var simpleGenerate = require('url-sweatshirt').generate;
+var simpleHomeUrl = simpleGenerate('/');
+
+var complexGenerate = require('url-sweatshirt')($.param).generate;
+var complexHomeUrl = complexGenerate('/');
+
+// returns '/?a=1&b=[object%20Object]'
+simpleHomeUrl({ a: 1, b: { c: 2, d: 3 }});
+
+// returns '/?a=1&b[c]=2&b[d]=3`
+complexHomeUrl({ a: 1, b: { c: 2, d: 3 }});
+```
+
 ### Features that aren't supported yet
 
 * Optional and splat params.

@@ -136,4 +136,29 @@ describe('generate', () => {
       expect(categoryUrl({ name: null })).toEqual('/categories');
     });
   });
+
+  describe('with a custom query encoder', () => {
+    let generate, homeUrl;
+
+    function myCustomEncoder(obj) {
+      if (obj.returnHello) {
+        return 'hello';
+      } else {
+        return '';
+      }
+    }
+
+    beforeEach(() => {
+      generate = require('../index')(myCustomEncoder).generate;
+      homeUrl = generate('/');
+    });
+
+    it('uses the custom encoder', () => {
+      expect(homeUrl({ returnHello: true })).toEqual('/?hello');
+    });
+
+    it('omits the ? if the custom encoder returns an empty string', () => {
+      expect(homeUrl({ dontReturnHello: true })).toEqual('/');
+    });
+  });
 });
