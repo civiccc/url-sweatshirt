@@ -22,6 +22,9 @@ userPostUrl({ userId: 1, id: 2 });
 
 // returns '/users/1/posts/2?q=javascript'
 userPostUrl(1, 2, { q: 'javascript' });
+
+// returns '/users/1/posts/2?q=javascript&foo=bar'
+userPostUrl(1, 2, { q: 'javascript' }, { foo: 'bar' });
 ```
 
 ### Defaults

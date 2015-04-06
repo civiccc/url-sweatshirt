@@ -137,15 +137,18 @@ function _generateHelper(urlSpec, defaults, encodeQueryString) {
   }
 
   return (...args) => {
-    const lastArg = args[args.length - 1];
+    const namedParamObjects = [];
     let namedParams;
 
-    if (lastArg && typeof lastArg === 'object') {
-      namedParams = lastArg;
-      args.pop();
-    } else {
-      namedParams = {};
+    for (let i = args.length - 1; i >= 0; i--) {
+      if (_isSimpleObject(args[i])) {
+        namedParamObjects.unshift(args.pop());
+      } else {
+        break;
+      }
     }
+
+    namedParams = _objectAssign({}, ...namedParamObjects);
 
     return _generateUrl(urlSpec, defaults, args, namedParams, encodeQueryString);
   };
@@ -348,4 +351,49 @@ function _simpleEncodeParams(obj) {
   }
 
   return result.join('&');
+}
+
+/**
+ * @private
+ * @return {boolean} Is the given object a "simple" object? We use this to
+ *   determine which params to a URL helper should be treated as containing
+ *   key-value pairs of parameters.
+ */
+function _isSimpleObject(obj) {
+  return (
+    Object.prototype.toString.call(obj) === '[object Object]' &&
+      obj.constructor.prototype.hasOwnProperty('isPrototypeOf')
+  );
+}
+
+/**
+ * @private
+ * @license Polyfill for Object.assign from Mozilla Developer Network. Any
+ *   copyright is dedicated to the Public Domain:
+ *     http://creativecommons.org/publicdomain/zero/1.0/
+ * @return {object} A merged version of the given objects, with later
+ *   parameters having precedence over earlier ones.
+ */
+function _objectAssign(target) {
+  if (target === undefined || target === null) {
+    throw new TypeError('Cannot convert first argument to object');
+  }
+
+  var to = Object(target);
+  for (var i = 1; i < arguments.length; i++) {
+    var nextSource = arguments[i];
+    if (nextSource === undefined || nextSource === null) {
+      continue;
+    }
+
+    var keysArray = Object.keys(Object(nextSource));
+    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+      var nextKey = keysArray[nextIndex];
+      var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+      if (desc !== undefined && desc.enumerable) {
+        to[nextKey] = nextSource[nextKey];
+      }
+    }
+  }
+  return to;
 }

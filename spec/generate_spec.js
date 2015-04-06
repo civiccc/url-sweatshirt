@@ -40,6 +40,11 @@ describe('generate', () => {
         .toEqual('/users/1/posts/2?extra_param=3&another_extra_param=4');
     });
 
+    it('merges multiple named param objects', () => {
+      expect(userPostUrl(1, { id: 2 }, { je: 3 }))
+        .toEqual('/users/1/posts/2?je=3');
+    });
+
     it('leaves a query param out if null is provided', () => {
       expect(userPostUrl(1, 2, { extra_param: null }))
         .toEqual('/users/1/posts/2');
@@ -159,6 +164,16 @@ describe('generate', () => {
 
     it('omits the ? if the custom encoder returns an empty string', () => {
       expect(homeUrl({ dontReturnHello: true })).toEqual('/');
+    });
+
+    it('merges all objects passed at the end of the param list', () => {
+      expect(
+        homeUrl(
+          { dontReturnHello: true },
+          { returnHello: true },
+          { _host: 'example.com' }
+        )
+      ).toEqual('//example.com/?hello');
     });
   });
 });
