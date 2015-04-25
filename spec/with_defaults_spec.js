@@ -42,16 +42,17 @@ describe('withDefaults', () => {
   });
 
   describe('with a custom query encoder', () => {
-    let withDefaults;
+    let withDefaultsCustomEncoder;
 
-    function myCustomEncoder(obj) {
+    function myCustomEncoder() {
       return 'hello';
     }
 
     beforeEach(() => {
-      withDefaults = require('../index')(myCustomEncoder).withDefaults;
+      withDefaultsCustomEncoder =
+        require('../index')(myCustomEncoder).withDefaults;
 
-      withDefaults({ _host: 'api.example.com' }, function(generate) {
+      withDefaultsCustomEncoder({ _host: 'api.example.com' }, function(generate) {
         userUrl = generate('/');
       });
     });
