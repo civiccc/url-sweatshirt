@@ -5,7 +5,7 @@
   "main": "dist/url-sweatshirt.js",
   "description": "Wrap your URLs in a warm layer of helper functions",
   "scripts": {
-    "test": "jest",
+    "test": "./node_modules/.bin/eslint . && jest",
     "js": "babel --modules common --out-file dist/url-sweatshirt.js ./index.js",
     "prepublish": "npm run js"
   },
@@ -17,9 +17,10 @@
     ],
     "testDirectoryName": "spec"
   },
-  "dependencies": {},
+  "dependencies": { },
   "devDependencies": {
     "babel": "^4.7.8",
+    "eslint": "^0.20.0",
     "jest-cli": "^0.4.0"
   },
   "repository": {

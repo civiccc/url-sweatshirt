@@ -1,2 +1,5 @@
+.eslintignore
+.eslintrc
+.travis.yml
 __tests__
 src

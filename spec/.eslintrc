@@ -1,0 +1,13 @@
+---
+  globals:
+    afterEach: false
+    beforeEach: false
+    describe: false
+    expect: false
+    it: false
+    jest: false
+
+  rules:
+    max-nested-callbacks:
+      - 2
+      - 4
