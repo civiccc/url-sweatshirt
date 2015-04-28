@@ -1,7 +1,7 @@
 {
   "name": "url-sweatshirt",
   "author": "Ryan Fitzgerald <ryan.fitzgerald@brigade.com>",
-  "version": "0.9.999",
+  "version": "1.0.0",
   "main": "dist/url-sweatshirt.js",
   "description": "Wrap your URLs in a warm layer of helper functions",
   "scripts": {
