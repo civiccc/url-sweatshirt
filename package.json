@@ -17,10 +17,11 @@
     ],
     "testDirectoryName": "spec"
   },
-  "dependencies": { },
+  "dependencies": {},
   "devDependencies": {
     "babel": "^4.7.8",
-    "eslint": "^0.20.0",
+    "eslint": "^0.21.0",
+    "eslint-config-brigade": "^1.0.0",
     "jest-cli": "^0.4.0"
   },
   "repository": {

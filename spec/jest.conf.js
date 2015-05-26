@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 const babel = require('babel');
 
 module.exports = {
