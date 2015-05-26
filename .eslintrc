@@ -1,95 +1,11 @@
----
-  env:
-    browser: true
-    es6: true
-    node: true
+{
+  'extends': 'eslint-config-brigade',
 
-  rules:
-    block-scoped-var: 0
-    brace-style:
-      - 2
-      - 1tbs
-      -
-        allowSingleLine: false
-    camelcase: 0
-    comma-dangle: 0
-    comma-style:
-      - 2
-      - last
-    complexity:
-      - 1
-      - 8
-    consistent-return: 0
-    key-spacing: 0
-    guard-for-in: 2
-    indent:
-      - 2
-      - 2
-    max-len:
-      - 0
-      - 80
-    max-nested-callbacks:
-      - 2
-      - 3
-    no-bitwise: 2
-    no-comma-dangle: 0
-    no-eq-null: 2
-    no-floating-decimal: 2
-    no-lonely-if: 2
-    no-multiple-empty-lines: 2
-    no-nested-ternary: 2
-    no-self-compare: 2
-    no-throw-literal: 2
-    no-use-before-define: 0
-    no-var: 2
-    no-void: 2
-    no-with: 2
-    new-cap:
-      - 2
-      -
-        newIsCap: true
-        capIsNew: false
-    no-duplicate-case: 0
-    no-multi-spaces: 0
-    no-shadow: 0
-    no-underscore-dangle: 0
-    operator-assignment:
-      - 2
-      - always
-    padded-blocks:
-      - 2
-      - never
-    quotes:
-      - 2
-      - single
-      - avoid-escape
-    radix: 2
-    space-after-keywords:
-      - 2
-      - always
-    space-before-blocks:
-      - 2
-      - always
-    space-before-function-paren:
-      - 2
-      - never
-    space-in-parens:
-      - 2
-      - never
-    spaced-line-comment:
-      - 2
-      - always
-    strict:
-      - 2
-      - never
-    valid-jsdoc:
-      - 0
-      -
-        prefer:
-          returns: return
-        requireParamDescription: false
-        requireReturn: false
-        requireReturnDescription: false
-    wrap-iife:
-      - 2
-      - outside
+  'rules': {
+    'max-len': 0,
+    'max-params': 0,
+    'no-shadow': 0,
+    'no-use-before-define': 0,
+    'valid-jsdoc': 0
+  }
+}
