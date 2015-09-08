@@ -164,7 +164,7 @@ function _withDefaults(globalDefaults, callback, encodeQueryString) {
   callback((urlSpec, localDefaults = {}) => {
     localDefaults = _cloneObject(localDefaults);
 
-    for (let key in globalDefaults) {
+    for (const key in globalDefaults) {
       if (globalDefaults.hasOwnProperty(key) &&
           !localDefaults.hasOwnProperty(key)) {
         localDefaults[key] = globalDefaults[key];
@@ -325,7 +325,7 @@ function _generateUrl(urlSpec,
 function _cloneObject(object) {
   const newObject = {};
 
-  for (let key in object) {
+  for (const key in object) {
     if (object.hasOwnProperty(key)) {
       newObject[key] = object[key];
     }
@@ -343,7 +343,7 @@ function _cloneObject(object) {
 function _simpleEncodeParams(obj) {
   const result = [];
 
-  for (let key in obj) {
+  for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const value = encodeURIComponent(obj[key].toString());
       result[result.length] = `${encodeURIComponent(key)}=${value}`;
