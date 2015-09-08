@@ -345,7 +345,7 @@ function _simpleEncodeParams(obj) {
 
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      let value = encodeURIComponent(obj[key].toString());
+      const value = encodeURIComponent(obj[key].toString());
       result[result.length] = `${encodeURIComponent(key)}=${value}`;
     }
   }
