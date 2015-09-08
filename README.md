@@ -113,3 +113,10 @@ complexHomeUrl({ a: 1, b: { c: 2, d: 3 }});
 * Lots of other features that we didn't need yet. Pull requests welcome!
 
 [JsRoutes]: https://github.com/railsware/js-routes
+
+## Code of conduct
+
+This project adheres to the [Open Code of Conduct][code-of-conduct]. By
+participating, you are expected to honor this code.
+
+[code-of-conduct]: https://github.com/brigade/code-of-conduct
